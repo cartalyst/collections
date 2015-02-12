@@ -1,0 +1,51 @@
+{
+    "name": "cartalyst/collections",
+    "description": "Collection Abstaction library for PHP.",
+    "keywords": [
+        "php",
+        "cartalyst",
+        "collections"
+    ],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Cartalyst LLC",
+            "email": "help@cartalyst.com"
+        },
+        {
+            "name": "Bruno Gaspar",
+            "email": "bruno.gaspar@cartalyst.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Dan Syme",
+            "email": "dan.syme@cartalyst.com",
+            "role": "Project Lead"
+        },
+        {
+            "name": "Suhayb Wardany",
+            "email": "su.wardany@cartalyst.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "guzzlehttp/guzzle": "~5.2"
+    },
+    "require-dev": {
+        "mockery/mockery": "~0.9",
+        "phpunit/phpunit": "~4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cartalyst\\Collections\\": "src/"
+        }
+    },
+    "extra": {
+        "component": "package",
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "minimum-stability": "stable"
+}
