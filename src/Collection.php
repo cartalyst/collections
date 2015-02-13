@@ -409,4 +409,49 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     {
         return $this->toJson();
     }
+
+    /**
+     * Dynamically retrieve the value of an item.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->get($key);
+    }
+
+    /**
+     * Dynamically set the value of an item.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return void
+     */
+    public function __set($key, $value)
+    {
+        $this->items[$key] = $value;
+    }
+
+    /**
+     * Dynamically check if an item is set.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function __isset($key)
+    {
+        return isset($this->items[$key]);
+    }
+
+    /**
+     * Dynamically unset an item.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function __unset($key)
+    {
+        unset($this->items[$key]);
+    }
 }
