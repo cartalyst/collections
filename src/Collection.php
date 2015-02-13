@@ -24,7 +24,6 @@ use Closure;
 use Countable;
 use ArrayAccess;
 use ArrayIterator;
-use CachingIterator;
 use JsonSerializable;
 use IteratorAggregate;
 
@@ -160,17 +159,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
-     * Push an item onto the beginning of the collection.
-     *
-     * @param  mixed  $value
-     * @return void
-     */
-    public function prepend($value)
-    {
-        array_unshift($this->items, $value);
-    }
-
-    /**
      * Push an item onto the end of the collection.
      *
      * @param  mixed  $value
@@ -246,10 +234,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 
         if (is_string($callback)) {
             $callback = function ($item) use ($callback) {
-                if (is_null($callback)) {
-                    return $item;
-                }
-
                 foreach (explode('.', $callback) as $segment) {
                     if (is_array($item)) {
                         if ( ! array_key_exists($segment, $item)) {
@@ -341,17 +325,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
-     * Get a CachingIterator instance.
-     *
-     * @param  int  $flags
-     * @return \CachingIterator
-     */
-    public function getCachingIterator($flags = CachingIterator::CALL_TOSTRING)
-    {
-        return new CachingIterator($this->getIterator(), $flags);
-    }
-
-    /**
      * Determine if an item exists at an offset.
      *
      * @param  mixed  $key
@@ -401,16 +374,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
-     * Convert the collection to its string representation.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toJson();
-    }
-
-    /**
      * Dynamically retrieve the value of an item.
      *
      * @param  string  $key
@@ -442,6 +405,16 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     public function __isset($key)
     {
         return isset($this->items[$key]);
+    }
+
+    /**
+     * Convert the collection to its string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toJson();
     }
 
     /**
