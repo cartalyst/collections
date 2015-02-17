@@ -186,7 +186,6 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Foo', $value);
 
         $this->assertCount(3, $collection);
-
     }
 
     /** @test */
@@ -241,7 +240,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $collection->put('bar', ['name' => 'Bar']);
         $collection->put('baz', ['name' => 'Baz']);
 
-        $collection->sort(function($item) {
+        $collection->sort(function ($item) {
             return $item;
         });
 
@@ -318,9 +317,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             'bat' => 'Bat',
         ]);
 
-        foreach ($collection as $item)
-        {
-
+        foreach ($collection as $item) {
         };
     }
 }
