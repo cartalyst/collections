@@ -1,6 +1,6 @@
 # Collections
 
-..
+[![Build Status](http://ci.cartalyst.com/build-status/svg/49)](http://ci.cartalyst.com/build-status/view/49)
 
 Collection Abstaction library for PHP.
 
