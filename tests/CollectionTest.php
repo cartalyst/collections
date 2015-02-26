@@ -20,11 +20,22 @@
 
 namespace Cartalyst\Collections\Tests;
 
+use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Cartalyst\Collections\Collection;
 
 class CollectionTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
+
     /** @test */
     public function a_collection_can_be_instantiated()
     {
@@ -319,5 +330,38 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
         foreach ($collection as $item) {
         };
+    }
+
+    /** @test */
+    public function it_can_sum_a_collection()
+    {
+        $collection = new Collection([
+            2,
+            3,
+        ]);
+
+        $this->assertEquals(5, $collection->sum());
+    }
+
+    /** @test */
+    public function it_can_sum_a_collection_by_method_calls()
+    {
+        $item1 = m::mock('stdClass');
+        $item2 = m::mock('stdClass');
+
+        $item1->shouldReceive('getValue')
+            ->once()
+            ->andReturn(2);
+
+        $item2->shouldReceive('getValue')
+            ->once()
+            ->andReturn(3);
+
+        $collection = new Collection([
+            $item1,
+            $item2,
+        ]);
+
+        $this->assertEquals(5, $collection->sum('getValue'));
     }
 }

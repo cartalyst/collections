@@ -281,6 +281,30 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
+     * Get the sum of the collection items.
+     *
+     * @param  mixed  $callback
+     * @return mixed
+     */
+    public function sum($callback = null)
+    {
+        if (is_null($callback))
+        {
+            return array_sum($this->items);
+        }
+
+        return array_reduce($this->items, function($result, $item) use ($callback)
+        {
+            if (is_string($callback))
+            {
+                return $result += $item->{$callback}();
+            }
+
+            return $result += $callback($item);
+        }, 0);
+    }
+
+    /**
      * Get the collection of items as a plain array.
      *
      * @return array
