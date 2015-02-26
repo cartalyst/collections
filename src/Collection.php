@@ -288,15 +288,12 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      */
     public function sum($callback = null)
     {
-        if (is_null($callback))
-        {
+        if (is_null($callback)) {
             return array_sum($this->items);
         }
 
-        return array_reduce($this->items, function($result, $item) use ($callback)
-        {
-            if (is_string($callback))
-            {
+        return array_reduce($this->items, function ($result, $item) use ($callback) {
+            if (is_string($callback)) {
                 return $result += $item->{$callback}();
             }
 
