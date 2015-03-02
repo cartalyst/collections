@@ -375,5 +375,4 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([ 'foo', 'bar' ], $collection->lists('id'));
     }
-
 }
