@@ -11,6 +11,13 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+#### v1.1.0 - TBA
+
+`ADDED`
+
+- Added a `sum` method.
+- Added a `lists` method.
+
 #### v1.0.0 - 2015-02-18
 
 `INIT`
