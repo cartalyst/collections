@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Collections
- * @version    1.0.0
+ * @version    1.1.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -364,4 +364,16 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(5, $collection->sum('getValue'));
     }
+
+    /** @test */
+    public function it_can_list_items_from_the_collection_using_a_key()
+    {
+        $collection = new Collection([
+            [ 'id' => 'foo' ],
+            [ 'id' => 'bar' ],
+        ]);
+
+        $this->assertEquals([ 'foo', 'bar' ], $collection->lists('id'));
+    }
+
 }

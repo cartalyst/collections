@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Collections
- * @version    1.0.0
+ * @version    1.1.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -146,6 +146,19 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     public function last()
     {
         return count($this->items) > 0 ? end($this->items) : null;
+    }
+
+    /**
+     * Get an array with the values of a given key.
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function lists($value)
+    {
+        return array_map(function ($item) use ($value) {
+            return isset($item[$value]) ? $item[$value] : null;
+        }, $this->items);
     }
 
     /**
