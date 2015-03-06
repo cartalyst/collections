@@ -16,12 +16,14 @@ Reader-friendly Documentation can be found here. [Collections Manual](https://ca
 
 Raw files can be found via this projects docs/version branch.
 
+- [1.1](https://github.com/cartalyst/collections/tree/docs/1.1)
 - [1.0](https://github.com/cartalyst/collections/tree/docs/1.0)
 
 ## Changelog
 
 Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
+- [1.1](CHANGELOG.md) - 2015-03-06
 - [1.0](CHANGELOG.md) - 2015-02-18
 
 ## Support

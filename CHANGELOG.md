@@ -11,7 +11,7 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
-#### v1.1.0 - TBA
+#### v1.1.0 - 2015-03-06
 
 `ADDED`
 
