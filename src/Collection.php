@@ -236,7 +236,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
             $callback = function ($item) use ($callback) {
                 foreach (explode('.', $callback) as $segment) {
                     if (is_array($item)) {
-                        if ( ! array_key_exists($segment, $item)) {
+                        if (! array_key_exists($segment, $item)) {
                             return null;
                         }
                         $item = $item[$segment];
