@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Collections
- * @version    1.1.0
+ * @version    1.2.0
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -40,7 +40,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * Constructor.
      *
      * @param  array  $items
-     * @return void
      */
     public function __construct(array $items = [])
     {
@@ -81,13 +80,12 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     /**
      * Get the first item from the collection.
      *
-     * @param  \Closure   $callback
-     * @param  mixed      $default
+     * @param  mixed  $default
      * @return mixed|null
      */
-    public function first(Closure $callback = null, $default = null)
+    public function first($default = null)
     {
-        return count($this->items) > 0 ? reset($this->items) : null;
+        return count($this->items) > 0 ? reset($this->items) : $default;
     }
 
     /**
@@ -146,6 +144,41 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     public function last()
     {
         return count($this->items) > 0 ? end($this->items) : null;
+    }
+
+    /**
+     * Run a filter over each of the items.
+     *
+     * @param  callable  $callback
+     * @return static
+     */
+    public function filter(callable $callback)
+    {
+        return new static(array_filter($this->items, $callback));
+    }
+
+    /**
+     * Map over the collection.
+     *
+     * @param  callable  $callback
+     * @return static
+     */
+    public function map(callable $callback)
+    {
+        return new static(array_map($callback, $this->items, array_keys($this->items)));
+    }
+
+    /**
+     * Slice the collection.
+     *
+     * @param  int  $offset
+     * @param  int  $length
+     * @param  bool  $preserveKeys
+     * @return static
+     */
+    public function slice($offset, $length = null, $preserveKeys = false)
+    {
+        return new static(array_slice($this->items, $offset, $length, $preserveKeys));
     }
 
     /**
@@ -246,6 +279,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
         $results = [];
 
         if (is_string($callback)) {
+            // Prepare callback for sorting by key
             $callback = function ($item) use ($callback) {
                 foreach (explode('.', $callback) as $segment) {
                     if (is_array($item)) {
@@ -305,12 +339,12 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
             return array_sum($this->items);
         }
 
-        return array_reduce($this->items, function ($result, $item) use ($callback) {
+        return array_reduce($this->items, function (&$result, $item) use ($callback) {
             if (is_string($callback)) {
                 return $result += $item->{$callback}();
             }
 
-            return $result += $callback($item);
+            return $result += call_user_func($callback, $item);
         }, 0);
     }
 
@@ -322,8 +356,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     public function toArray()
     {
         return array_map(function ($value) {
-            return $value instanceof Arrayable ? $value->toArray() : $value;
-
+            return method_exists($value, 'toArray') ? $value->toArray() : $value;
         }, $this->items);
     }
 
@@ -434,7 +467,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * Dynamically check if an item is set.
      *
      * @param  string  $key
-     * @return void
+     * @return bool
      */
     public function __isset($key)
     {
