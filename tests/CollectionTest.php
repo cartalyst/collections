@@ -291,7 +291,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $output = $collection->sortByDesc('id')->all();
+        $output = $collection->sortByDesc('name')->all();
 
         $this->assertTrue($expected === $output);
     }
