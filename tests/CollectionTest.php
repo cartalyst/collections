@@ -375,4 +375,63 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([ 'foo', 'bar' ], $collection->lists('id'));
     }
+
+    /** @test */
+    public function it_can_filter_a_collection_using_a_function()
+    {
+        $collection = new Collection([
+            [ 'id' => 'foo' ],
+            [ 'id' => 'bar' ],
+        ]);
+
+        $filtered = $collection->filter(function ($item) {
+            return $item['id'] === 'foo';
+        });
+
+        $this->assertCount(1, $filtered);
+    }
+
+    /** @test */
+    public function it_can_map_a_collection_using_a_function()
+    {
+        $collection = new Collection([
+            [ 'id' => 'foo' ],
+            [ 'id' => 'bar' ],
+        ]);
+
+        $mapped = $collection->map(function ($item) {
+            $item['id'] .= 'baz';
+            return $item;
+        });
+
+        $expected = [
+            [ 'id' => 'foobaz' ],
+            [ 'id' => 'barbaz' ],
+        ];
+
+        $this->assertEquals($expected, $mapped->all());
+    }
+
+    /** @test */
+    public function it_can_slice_a_collection()
+    {
+        $collection = new Collection(['a', 'b', 'c', 'd', 'e']);
+
+        $sliced1 = $collection->slice(2);
+
+        $this->assertEquals(['c', 'd', 'e'], $sliced1->all());
+
+        $sliced2 = $collection->slice(-2, 1);
+
+        $this->assertEquals(['d'], $sliced2->all());
+
+        $sliced3 = $collection->slice(2, -1, true);
+
+        $expected = [
+            2 => 'c',
+            3 => 'd'
+        ];
+
+        $this->assertEquals($expected, $sliced3->all());
+    }
 }
