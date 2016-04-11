@@ -147,6 +147,55 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
+     * Iterate over each of the items.
+     *
+     * @param  callable  $callback
+     * @return $this
+     */
+    public function each(callable $callback)
+    {
+        foreach ($this->items as $key => $item) {
+            if ($callback($item, $key) === false) {
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Flip the items in the collection.
+     *
+     * @return static
+     */
+    public function flip()
+    {
+        return new static(array_flip($this->items));
+    }
+
+    /**
+     * Reduce the collection to a single value.
+     *
+     * @param  callable  $callback
+     * @param  mixed     $initial
+     * @return mixed
+     */
+    public function reduce(callable $callback, $initial = null)
+    {
+        return array_reduce($this->items, $callback, $initial);
+    }
+
+    /**
+     * Reverse items order.
+     *
+     * @return static
+     */
+    public function reverse($preserve_keys = true)
+    {
+        return new static(array_reverse($this->items, $preserve_keys));
+    }
+
+    /**
      * Run a filter over each of the items.
      *
      * @param  callable  $callback

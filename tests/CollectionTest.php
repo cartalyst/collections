@@ -291,9 +291,9 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $output = $collection->sortByDesc('id')->all();
+        $output = $collection->sortByDesc('name')->all();
 
-        $this->assertTrue($expected === $output);
+        $this->assertEquals($expected, $output);
     }
 
     /** @test */
@@ -374,6 +374,95 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals([ 'foo', 'bar' ], $collection->lists('id'));
+    }
+
+    /** @test */
+    public function it_can_iterate_over_a_collection_using_a_function()
+    {
+        $collection = new Collection([
+            'foo' => 'Foo',
+            'bar' => 'Bar',
+        ]);
+
+        $collection->each(function ($v, $k) {
+            $this->assertNotEmpty($v);
+            $this->assertNotEmpty($k);
+        });
+    }
+
+    /** @test */
+    public function it_can_flip_a_collection()
+    {
+        $collection = new Collection(['oranges', 'apples', 'pears']);
+
+        $flipped = $collection->flip();
+
+        $expected = [
+            'oranges' => 0,
+            'apples' => 1,
+            'pears' => 2,
+        ];
+
+        $this->assertEquals($expected, $flipped->all());
+    }
+
+    /** @test */
+    public function it_can_reduce_a_collection_using_a_function()
+    {
+        $collection = new Collection([1, 2, 3, 4, 5]);
+
+        $sum = $collection->reduce(function ($carry, $item) {
+            $carry += $item;
+            return $carry;
+        });
+
+        $this->assertEquals(15, $sum);
+
+        $product = $collection->reduce(function ($carry, $item) {
+            $carry *= $item;
+            return $carry;
+        }, 10);
+
+        $this->assertEquals(1200, $product);
+
+        $sum2 = $collection->reduce(function ($carry, $item) {
+            $carry += $item;
+            return $carry;
+        }, 'No Data To Reduce');
+
+        $this->assertEquals(15, $sum2);
+    }
+
+    /** @test */
+    public function it_can_reverse_a_collection()
+    {
+        $collection = new Collection(['php', 4.0, ['green', 'red']]);
+
+        $reversed = $collection->reverse();
+
+        $expected = [
+            0 => 'php',
+            1 => 4.0,
+            2 => [
+                0 => 'green',
+                1 => 'red',
+            ],
+        ];
+
+        $this->assertEquals($expected, $reversed->all());
+
+        $reversed2 = $collection->reverse(false);
+
+        $expected = [
+            0 => [
+                0 => 'green',
+                1 => 'red',
+            ],
+            1 => 4.0,
+            2 => 'php',
+        ];
+
+        $this->assertEquals($expected, $reversed2->all());
     }
 
     /** @test */
