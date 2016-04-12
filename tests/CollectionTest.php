@@ -391,6 +391,20 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_iterate_over_every_other_item_in_a_collection()
+    {
+        $collection = new Collection(['a', 'b', 'c', 'd', 'e', 'f']);
+
+        $output = $collection->every(4);
+
+        $this->assertEquals(['a', 'e'], $output->all());
+
+        $offset = $collection->every(4, 1);
+
+        $this->assertEquals(['b', 'f'], $offset->all());
+    }
+
+    /** @test */
     public function it_can_flip_a_collection()
     {
         $collection = new Collection(['oranges', 'apples', 'pears']);
