@@ -344,6 +344,17 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_sum_by_key_on_a_collection()
+    {
+        $collection = new Collection([
+            ['name' => 'JavaScript: The Good Parts', 'pages' => 176],
+            ['name' => 'JavaScript: The Definitive Guide', 'pages' => 1096],
+        ]);
+
+        $this->assertEquals(1272, $collection->sum('pages'));
+    }
+
+    /** @test */
     public function it_can_sum_a_collection_by_method_calls()
     {
         $item1 = m::mock('stdClass');

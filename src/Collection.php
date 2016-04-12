@@ -390,7 +390,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
 
         return array_reduce($this->items, function (&$result, $item) use ($callback) {
             if (is_string($callback)) {
-                return $result += $item->{$callback}();
+                return $result += (is_object($item)) ? $item->{$callback}() : $item[$callback];
             }
 
             return $result += call_user_func($callback, $item);
