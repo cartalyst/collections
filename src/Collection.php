@@ -164,6 +164,26 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
+     * Create a new collection consisting of every n-th element.
+     *
+     * @param  int  $step
+     * @param  int  $offset
+     * @return static
+     */
+    public function every($step, $offset = 0)
+    {
+        $new = [];
+        $position = 0;
+        foreach ($this->items as $item) {
+            if ($position % $step === $offset) {
+                $new[] = $item;
+            }
+            $position++;
+        }
+        return new static($new);
+    }
+
+    /**
      * Flip the items in the collection.
      *
      * @return static
