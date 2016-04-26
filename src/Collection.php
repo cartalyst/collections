@@ -218,12 +218,41 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     /**
      * Run a filter over each of the items.
      *
-     * @param  callable  $callback
+     * @param  callable|null  $callback
      * @return static
      */
-    public function filter(callable $callback)
+    public function filter(callable $callback = null)
     {
-        return new static(array_filter($this->items, $callback));
+        if ($callback) {
+            $return = [];
+            foreach ($this->items as $key => $value) {
+                if ($callback($value, $key)) {
+                    $return[$key] = $value;
+                }
+            }
+            return new static($return);
+        }
+
+        return new static(array_filter($this->items));
+    }
+
+    /**
+     * Create a collection of all elements that do not pass a given truth test.
+     *
+     * @param  callable|mixed  $callback
+     * @return static
+     */
+    public function reject($callback)
+    {
+        if (is_callable($callback)) {
+            return $this->filter(function ($value, $key) use ($callback) {
+                return ! $callback($value, $key);
+            });
+        }
+
+        return $this->filter(function ($item) use ($callback) {
+            return $item != $callback;
+        });
     }
 
     /**

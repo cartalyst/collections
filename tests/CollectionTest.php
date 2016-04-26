@@ -506,6 +506,28 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_reject_filter_a_collection()
+    {
+        $collection = new Collection([1, 2, 3, 4]);
+
+        $filtered = $collection->reject(function ($value, $key) {
+            return $value > 2;
+        });
+
+        $this->assertEquals([1, 2], $filtered->all());
+
+        $filtered2 = $collection->reject(3);
+
+        $expected = [
+            0 => 1,
+            1 => 2,
+            3 => 4,
+        ];
+
+        $this->assertEquals($expected, $filtered2->all());
+    }
+
+    /** @test */
     public function it_can_map_a_collection_using_a_function()
     {
         $collection = new Collection([
