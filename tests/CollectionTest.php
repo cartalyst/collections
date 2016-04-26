@@ -407,6 +407,14 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_split_a_collection_into_chunks()
+    {
+        $collection = new Collection([1, 2, 3, 4, 5, 6, 7]);
+
+        $this->assertEquals([[1, 2, 3, 4], [5, 6, 7]], $collection->chunk(4)->toArray());
+    }
+
+    /** @test */
     public function it_can_list_items_from_the_collection_using_a_key()
     {
         $collection = new Collection([

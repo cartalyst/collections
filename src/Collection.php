@@ -477,6 +477,21 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
+     * Chunk the underlying collection array.
+     *
+     * @param  int   $size
+     * @return static
+     */
+    public function chunk($size, $preserve_keys = false)
+    {
+        $chunks = [];
+        foreach (array_chunk($this->items, $size, $preserve_keys) as $chunk) {
+            $chunks[] = new static($chunk);
+        }
+        return new static($chunks);
+    }
+
+    /**
      * Get the collection of items as a plain array.
      *
      * @return array
