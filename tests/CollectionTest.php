@@ -168,6 +168,36 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_return_only_select_keys_from_a_collection()
+    {
+        $collection = new Collection([
+            'product_id' => 1,
+            'name' => 'Desk',
+            'price' => 100,
+            'discount' => false
+        ]);
+
+        $filtered = $collection->only(['product_id', 'name']);
+
+        $this->assertEquals(['product_id' => 1, 'name' => 'Desk'], $filtered->all());
+    }
+
+    /** @test */
+    public function it_can_all_select_keys_from_a_collection_with_exception()
+    {
+        $collection = new Collection([
+            'product_id' => 1,
+            'name' => 'Desk',
+            'price' => 100,
+            'discount' => false
+        ]);
+
+        $filtered = $collection->except(['price', 'discount']);
+
+        $this->assertEquals(['product_id' => 1, 'name' => 'Desk'], $filtered->all());
+    }
+
+    /** @test */
     public function it_can_push_an_item_to_the_end_of_the_collection()
     {
         $collection = new Collection([
