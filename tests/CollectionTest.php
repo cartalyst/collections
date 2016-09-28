@@ -426,221 +426,24 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_can_iterate_over_a_collection_using_a_function()
+    public function it_can_pluck_from_the_collection()
     {
         $collection = new Collection([
-            'foo' => 'Foo',
-            'bar' => 'Bar',
+            ['id' => 'foo'],
+            ['id' => 'bar'],
         ]);
 
-        $collection->each(function ($v, $k) {
-            $this->assertNotEmpty($v);
-            $this->assertNotEmpty($k);
-        });
+        $this->assertEquals(['foo', 'bar'], $collection->pluck('id'));
     }
 
     /** @test */
-    public function it_can_iterate_over_every_other_item_in_a_collection()
-    {
-        $collection = new Collection(['a', 'b', 'c', 'd', 'e', 'f']);
-
-        $output = $collection->every(4);
-
-        $this->assertEquals(['a', 'e'], $output->all());
-
-        $offset = $collection->every(4, 1);
-
-        $this->assertEquals(['b', 'f'], $offset->all());
-    }
-
-    /** @test */
-    public function it_can_flip_a_collection()
-    {
-        $collection = new Collection(['oranges', 'apples', 'pears']);
-
-        $flipped = $collection->flip();
-
-        $expected = [
-            'oranges' => 0,
-            'apples' => 1,
-            'pears' => 2,
-        ];
-
-        $this->assertEquals($expected, $flipped->all());
-    }
-
-    /** @test */
-    public function it_can_reduce_a_collection_using_a_function()
-    {
-        $collection = new Collection([1, 2, 3, 4, 5]);
-
-        $sum = $collection->reduce(function ($carry, $item) {
-            $carry += $item;
-            return $carry;
-        });
-
-        $this->assertEquals(15, $sum);
-
-        $product = $collection->reduce(function ($carry, $item) {
-            $carry *= $item;
-            return $carry;
-        }, 10);
-
-        $this->assertEquals(1200, $product);
-
-        $sum2 = $collection->reduce(function ($carry, $item) {
-            $carry += $item;
-            return $carry;
-        }, 'No Data To Reduce');
-
-        $this->assertEquals(15, $sum2);
-    }
-
-    /** @test */
-    public function it_can_reverse_a_collection()
-    {
-        $collection = new Collection(['php', 4.0, ['green', 'red']]);
-
-        $reversed = $collection->reverse();
-
-        $expected = [
-            0 => 'php',
-            1 => 4.0,
-            2 => [
-                0 => 'green',
-                1 => 'red',
-            ],
-        ];
-
-        $this->assertEquals($expected, $reversed->all());
-
-        $reversed2 = $collection->reverse(false);
-
-        $expected = [
-            0 => [
-                0 => 'green',
-                1 => 'red',
-            ],
-            1 => 4.0,
-            2 => 'php',
-        ];
-
-        $this->assertEquals($expected, $reversed2->all());
-    }
-
-    /** @test */
-    public function it_can_filter_a_collection_using_a_function()
+    public function it_can_pluck_from_the_collection_and_rekey_the_results()
     {
         $collection = new Collection([
-            [ 'id' => 'foo' ],
-            [ 'id' => 'bar' ],
+            ['product_id' => 'prod-100', 'name' => 'Desk'],
+            ['product_id' => 'prod-200', 'name' => 'Chair'],
         ]);
 
-        $filtered = $collection->filter(function ($item) {
-            return $item['id'] === 'foo';
-        });
-
-        $this->assertCount(1, $filtered);
-    }
-
-    /** @test */
-    public function it_can_reject_filter_a_collection()
-    {
-        $collection = new Collection([1, 2, 3, 4]);
-
-        $filtered = $collection->reject(function ($value, $key) {
-            return $value > 2;
-        });
-
-        $this->assertEquals([1, 2], $filtered->all());
-
-        $filtered2 = $collection->reject(3);
-
-        $expected = [
-            0 => 1,
-            1 => 2,
-            3 => 4,
-        ];
-
-        $this->assertEquals($expected, $filtered2->all());
-    }
-
-    /** @test */
-    public function it_can_map_a_collection_using_a_function()
-    {
-        $collection = new Collection([
-            [ 'id' => 'foo' ],
-            [ 'id' => 'bar' ],
-        ]);
-
-        $mapped = $collection->map(function ($item) {
-            $item['id'] .= 'baz';
-            return $item;
-        });
-
-        $expected = [
-            [ 'id' => 'foobaz' ],
-            [ 'id' => 'barbaz' ],
-        ];
-
-        $this->assertEquals($expected, $mapped->all());
-    }
-
-    /** @test */
-    public function it_can_slice_a_collection()
-    {
-        $collection = new Collection(['a', 'b', 'c', 'd', 'e']);
-
-        $sliced1 = $collection->slice(2);
-
-        $this->assertEquals(['c', 'd', 'e'], $sliced1->all());
-
-        $sliced2 = $collection->slice(-2, 1);
-
-        $this->assertEquals(['d'], $sliced2->all());
-
-        $sliced3 = $collection->slice(2, -1, true);
-
-        $expected = [
-            2 => 'c',
-            3 => 'd'
-        ];
-
-        $this->assertEquals($expected, $sliced3->all());
-    }
-
-    /** @test */
-    public function it_can_merge_a_collection_with_an_array()
-    {
-        $collection = new Collection(['a', 'b', 'c', 'd', 'e']);
-
-        $result = $collection->merge(['f', 'g', 'h']);
-
-        $this->assertEquals(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], $result->all());
-    }
-
-    /** @test */
-    public function it_can_merge_a_collection_with_an_object()
-    {
-        $collection = new Collection(['a', 'b', 'c', 'd', 'e']);
-
-        $obj = new \stdClass();
-        $obj->f = 'f';
-        $obj->g = 'g';
-        $obj->h = 'h';
-
-        $result = $collection->merge($obj);
-
-        $this->assertEquals(['a', 'b', 'c', 'd', 'e', 'f' => 'f', 'g' => 'g', 'h' => 'h'], $result->all());
-    }
-
-    /** @test */
-    public function it_can_merge_a_collection_with_multiple_arrays()
-    {
-        $collection = new Collection(['a', 'b']);
-
-        $result = $collection->merge(['c', 'd', 'e'], ['f', 'g', 'h']);
-
-        $this->assertEquals(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], $result->all());
+        $this->assertEquals(['prod-100' => 'Desk', 'prod-200' => 'Chair'], $collection->pluck('name', 'product_id'));
     }
 }

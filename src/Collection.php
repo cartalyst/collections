@@ -458,6 +458,18 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     }
 
     /**
+     * Pluck an array of values from an array.
+     *
+     * @param  string|array  $value
+     * @param  string|array|null  $key
+     * @return array
+     */
+    public function pluck($value, $key = null)
+    {
+        return array_column($this->items, $value, $key);
+    }
+
+    /**
      * Sort the collection in descending order using the given Closure.
      *
      * @param  \Closure|string  $callback
