@@ -375,4 +375,26 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([ 'foo', 'bar' ], $collection->lists('id'));
     }
+
+    /** @test */
+    public function it_can_pluck_from_the_collection()
+    {
+        $collection = new Collection([
+            ['id' => 'foo'],
+            ['id' => 'bar'],
+        ]);
+
+        $this->assertEquals(['foo', 'bar'], $collection->pluck('id'));
+    }
+
+    /** @test */
+    public function it_can_pluck_from_the_collection_and_rekey_the_results()
+    {
+        $collection = new Collection([
+            ['product_id' => 'prod-100', 'name' => 'Desk'],
+            ['product_id' => 'prod-200', 'name' => 'Chair'],
+        ]);
+
+        $this->assertEquals(['prod-100' => 'Desk', 'prod-200' => 'Chair'], $collection->pluck('name', 'product_id'));
+    }
 }
