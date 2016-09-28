@@ -633,4 +633,14 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(['a', 'b', 'c', 'd', 'e', 'f' => 'f', 'g' => 'g', 'h' => 'h'], $result->all());
     }
+
+    /** @test */
+    public function it_can_merge_a_collection_with_multiple_arrays()
+    {
+        $collection = new Collection(['a', 'b']);
+
+        $result = $collection->merge(['c', 'd', 'e'], ['f', 'g', 'h']);
+
+        $this->assertEquals(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], $result->all());
+    }
 }

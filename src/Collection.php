@@ -251,9 +251,12 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @param  mixed  $items
      * @return static
      */
-    public function merge($items)
+    public function merge(...$items)
     {
-        return new static(array_merge($this->items, (array)$items));
+        foreach ($items as &$item) {
+            $item = (array)$item;
+        }
+        return new static(array_merge($this->items, ...$items));
     }
 
     /**
