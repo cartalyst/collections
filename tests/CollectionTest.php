@@ -608,4 +608,29 @@ class CollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $sliced3->all());
     }
+
+    /** @test */
+    public function it_can_merge_a_collection_with_an_array()
+    {
+        $collection = new Collection(['a', 'b', 'c', 'd', 'e']);
+
+        $result = $collection->merge(['f', 'g', 'h']);
+
+        $this->assertEquals(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], $result->all());
+    }
+
+    /** @test */
+    public function it_can_merge_a_collection_with_an_object()
+    {
+        $collection = new Collection(['a', 'b', 'c', 'd', 'e']);
+
+        $obj = new \stdClass();
+        $obj->f = 'f';
+        $obj->g = 'g';
+        $obj->h = 'h';
+
+        $result = $collection->merge($obj);
+
+        $this->assertEquals(['a', 'b', 'c', 'd', 'e', 'f' => 'f', 'g' => 'g', 'h' => 'h'], $result->all());
+    }
 }
