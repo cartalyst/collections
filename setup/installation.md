@@ -8,7 +8,7 @@ The best and easiest way to install the Collections package is with [Composer](h
 
 Open your `composer.json` file and add the following to the `require` array:
 
-	"cartalyst/collections": "1.0.*"
+	"cartalyst/collections": "^1.0"
 
 > **Note:** Make sure that after the required changes your `composer.json` file is valid by running `composer validate`.
 
