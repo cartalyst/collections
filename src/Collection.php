@@ -23,6 +23,7 @@ namespace Cartalyst\Collections;
 use Closure;
 use Countable;
 use ArrayAccess;
+use Traversable;
 use ArrayIterator;
 use JsonSerializable;
 use IteratorAggregate;
@@ -72,7 +73,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
@@ -232,7 +233,13 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      */
     public function reduce(callable $callback, $initial = null)
     {
-        return array_reduce($this->items, $callback, $initial);
+        $result = $initial;
+
+        foreach ($this as $key => $value) {
+            $result = $callback($result, $value, $key);
+        }
+
+        return $result;
     }
 
     /**
@@ -461,13 +468,13 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @param  mixed  $callback
      * @return mixed
      */
-    public function sum($callback = null)
+    public function sum($callback = null): mixed
     {
         if (is_null($callback)) {
             return array_sum($this->items);
         }
 
-        return array_reduce($this->items, function (&$result, $item) use ($callback) {
+        return $this->reduce(function (&$result, $item) use ($callback) {
             if (is_string($callback)) {
                 return $result += is_object($item) ? $item->{$callback}() : $item[$callback];
             }
@@ -499,7 +506,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     public function toArray()
     {
         return array_map(function ($value) {
-            return method_exists($value, 'toArray') ? $value->toArray() : $value;
+            return is_object($value) && method_exists($value, 'toArray') ? $value->toArray() : $value;
         }, $this->items);
     }
 
@@ -508,7 +515,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->toArray();
     }
@@ -529,7 +536,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      *
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }
@@ -540,7 +547,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @param  mixed  $key
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return array_key_exists($key, $this->items);
     }
@@ -551,7 +558,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @param  mixed  $key
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet($key): mixed
     {
         return $this->items[$key];
     }
@@ -563,7 +570,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @param  mixed  $value
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         if (is_null($key)) {
             $this->items[] = $value;
@@ -578,7 +585,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * @param  string  $key
      * @return void
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         unset($this->items[$key]);
     }
