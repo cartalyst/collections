@@ -10,6 +10,9 @@ We do not give estimated times for completion on `Accepted` Proposals.
 - [Rejected](https://github.com/cartalyst/collections/labels/Rejected)
 
 ---
+#### v2.0.0 - 2022-02-14
+
+- Laravel 9 support.
 
 #### v1.1.0 - 2015-03-06
 
