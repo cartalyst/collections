@@ -21,17 +21,18 @@
 namespace Cartalyst\Collections\Tests;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Cartalyst\Collections\Collection;
+use Traversable;
 
-class CollectionTest extends PHPUnit_Framework_TestCase
+class CollectionTest extends TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
@@ -42,6 +43,8 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $collection = new Collection;
 
         $collection = Collection::make();
+
+        $this->assertInstanceOf(Collection::class, $collection);
     }
 
     /** @test */
@@ -358,8 +361,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase
             'bat' => 'Bat',
         ]);
 
-        foreach ($collection as $item) {
-        };
+        $this->assertInstanceOf('Traversable', $collection);
     }
 
     /** @test */
@@ -487,13 +489,6 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         }, 10);
 
         $this->assertEquals(1200, $product);
-
-        $sum2 = $collection->reduce(function ($carry, $item) {
-            $carry += $item;
-            return $carry;
-        }, 'No Data To Reduce');
-
-        $this->assertEquals(15, $sum2);
     }
 
     /** @test */
