@@ -434,7 +434,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
      * Dynamically check if an item is set.
      *
      * @param  string  $key
-     * @return string
+     * @return bool
      */
     public function __isset($key): bool
     {
